@@ -22,7 +22,7 @@ func NewClient(key string) *Client {
 
 func (c Client) makerq(endpoint string, queryString url.Values) ([]byte, error) {
 	queryString.Set("k", c.key)
-	req, err := http.NewRequest("GET", "https://osu.ppy.sh/api/"+endpoint+"?"+queryString.Encode(), nil)
+	req, err := http.NewRequest("GET", "https://ussr.pl/api/"+endpoint+"?"+queryString.Encode(), nil)
 	if err != nil {
 		return nil, err
 	}
