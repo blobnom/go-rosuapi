@@ -17,6 +17,7 @@ type GetScoresOpts struct {
 	Mode     Mode
 	Mods     *Mods // Pointer because must have the possibility to be 0 (nomod) but also nil (whatever is fine)
 	Limit    int
+	Relax    int
 }
 
 // Score is an osu! score. Used in both get_scores, get_user_best and get_user_recent.
@@ -68,12 +69,20 @@ func (c Client) GetScores(opts GetScoresOpts) ([]GSScore, error) {
 	if opts.Limit != 0 {
 		vals.Add("limit", strconv.Itoa(opts.Limit))
 	}
+	if opts.Relax != 0 {
+		vals.Add("rx", strconv.Itoa(opts.Relax))
+	}
 
 	// actual request
 	rawData, err := c.makerq("get_scores", vals)
 	if err != nil {
 		return nil, err
 	}
+
+	if string(rawData) == "null" {
+		return nil, errors.New("osuapi: No scores found")
+	}
+
 	scores := []GSScore{}
 	err = json.Unmarshal(rawData, &scores)
 	if err != nil {
