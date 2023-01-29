@@ -61,10 +61,8 @@ func (c Client) GetUser(opts GetUserOpts) (*User, error) {
 	switch {
 	case opts.UserID != 0:
 		vals.Add("u", strconv.Itoa(opts.UserID))
-		vals.Add("type", "id")
 	case opts.Username != "":
 		vals.Add("u", opts.Username)
-		vals.Add("type", "string")
 	default:
 		return nil, errors.New("osuapi: either UserID or Username must be set in GetUserOpts")
 	}
